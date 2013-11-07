@@ -1,6 +1,18 @@
 # Faye::RedisDelayed
 
-Delayed Redis engine backend for Faye
+Delayed Redis engine backend for [Faye](http://faye.jcoglan.com/) ruby server.
+It allows delivey of messages sent **before** client connects to the channel.
+
+Turn this timeline:
+
+![Regular faye](https://monterail-share.s3.amazonaws.com/public/codetunes/2013-02-11-robust-dashboard-application-with-faye/tymon-faye-timeline1.png)
+
+into this
+
+![RedisDelayed faye](https://monterail-share.s3.amazonaws.com/public/codetunes/2013-02-11-robust-dashboard-application-with-faye/tymon-faye-timeline2.png)
+
+
+Read the [real world story behind it](http://codetunes.com/2013/robust-dashboard-application-with-faye/).
 
 ## Installation
 
@@ -13,6 +25,7 @@ Add this line to your application's Gemfile:
 Pass in the engine and any settings you need when setting up your Faye server.
 
 ```rb
+# faye config.ru
 require 'faye'
 require 'faye/redis'
 
@@ -20,17 +33,18 @@ bayeux = Faye::RackAdapter.new(
   :mount   => '/',
   :timeout => 25,
   :engine  => {
-    :type  => Faye::RedisDelayed,
-    # more options
+    :type   => Faye::RedisDelayed,  # set the engine type
+    :expire => 30                   # not delivered message will wait for 30 seconds
+    # other Faye::Redis engine options
   }
 )
 ```
 
-Full list of options see [faye-redis](https://github.com/faye/faye-redis-ruby)
+Additional options provided by `Faye::DelayedRedis` engine:
 
-Additional options:
+* `:expire` - expire time in seconds, defaults to 60
 
-* <b>`:expire`</b> - expire time in seconds, default 60
+For full list of `Faye::Redis` engine options see [faye-redis](https://github.com/faye/faye-redis-ruby) engine.
 
 ## Contributing
 
