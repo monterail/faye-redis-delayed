@@ -29,7 +29,7 @@ When initializing a new Faye server, reference the engine and pass any required 
 require 'faye'
 require 'faye/redis'
 
-bayeux = Faye::RackAdapter.new(
+server = Faye::RackAdapter.new(
   :mount   => '/',
   :timeout => 25,
   :engine  => {
@@ -38,6 +38,8 @@ bayeux = Faye::RackAdapter.new(
     # …                             # other Faye::Redis engine options
   }
 )
+
+run server
 ```
 
 Additional options provided by `Faye::DelayedRedis`:
