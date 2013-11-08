@@ -16,7 +16,9 @@ You can read about the [real case scenario](http://codetunes.com/2013/robust-das
 
 Add this line to your application’s `Gemfile`:
 
-    gem 'faye-redis-delayed'
+```rb
+gem 'faye-redis-delayed'
+```
 
 ## Usage
 
