@@ -27,7 +27,7 @@ When initializing a new Faye server, reference the engine and pass any required 
 ```rb
 # faye config.ru
 require 'faye'
-require 'faye/redis'
+require 'faye/redis_delayed'
 
 server = Faye::RackAdapter.new(
   :mount   => '/',
