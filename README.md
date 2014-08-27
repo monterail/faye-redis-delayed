@@ -1,4 +1,4 @@
-# Faye::RedisDelayed
+# Faye::RedisDelayed [![Gem Version](https://badge.fury.io/rb/faye-redis-delayed.png)](http://badge.fury.io/rb/faye-redis-delayed) [![Circle CI](https://circleci.com/gh/monterail/faye-redis-delayed.png?style=shield)](https://circleci.com/gh/monterail/faye-redis-delayed)
 
 > Delayed Redis engine back-end for [Faye](http://faye.jcoglan.com/) Ruby server. Enables delivey of messages that were sent *before* a client has connected to the channel.
 
