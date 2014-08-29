@@ -13,7 +13,7 @@ module Faye
       # fetch awaiting messages from redis and publish them
       @redis.lpop(@ns + "/channels#{channel}/awaiting_messages") do |json_message|
         if json_message
-          message = Yajl::Parser.parse(json_message)
+          message = MultiJson.load(json_message)
           publish(message, [message["channel"]], json_message)
           publish_awaiting_messages(channel)
         end
