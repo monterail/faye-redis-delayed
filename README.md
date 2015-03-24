@@ -45,6 +45,19 @@ run server
 Additional options provided by `Faye::DelayedRedis`:
 
 * `:expire` — expire time in seconds, defaults to `60`
+* `:delay_channels` - Array of channels that should be delayed
+
+:delay_channels can be specified as strings or as regular expressions.
+If something is given, then only channels matching one of the listed
+patterns will be delayed.  Without this argument, every channel is
+delayed.
+
+```rb
+  :engine  => {
+    :type           => Faye::RedisDelayed,
+    :delay_channels => [/^\/queues_with_this_prefix/, "/this/one/queue"],
+  }
+```
 
 See the full list of [`Faye::Redis` engine options](https://github.com/faye/faye-redis-ruby).
 
