@@ -37,7 +37,6 @@ module Faye
           @redis.expire(key, @options[:expire] || DEFAULT_EXPIRE)
         end
 
-
         clients.each do |client_id|
           queue = @ns + "/clients/#{client_id}/messages"
 
@@ -59,9 +58,6 @@ module Faye
     def delay_channels
       @delay_channels ||= Array(@options[:delay_channels]).flatten
     end
-
-    # returns true if this channel should be delayed.  The default is
-    # yes, unless :delay_channels is set in the engine options
 
     def delay_channel?(channel)
       delay_channels.empty? || delay_channels.any? { |pattern| pattern === channel }
