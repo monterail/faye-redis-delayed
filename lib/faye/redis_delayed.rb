@@ -29,28 +29,38 @@ module Faye
       keys         = channels.map { |c| @ns + "/channels#{c}" }
 
       @redis.sunion(*keys) do |clients|
-        if clients.empty?
+        if clients.empty? && delay_channel?(message["channel"])
           key = @ns + "/channels#{message["channel"]}/awaiting_messages"
           # store message in redis
           @redis.rpush(key, json_message)
           # Set expiration time to one minute
           @redis.expire(key, @options[:expire] || DEFAULT_EXPIRE)
-        else
-          clients.each do |client_id|
-            queue = @ns + "/clients/#{client_id}/messages"
+        end
 
-            @server.debug 'Queueing for client ?: ?', client_id, message
-            @redis.rpush(queue, json_message)
-            @redis.publish(@message_channel, client_id)
+        clients.each do |client_id|
+          queue = @ns + "/clients/#{client_id}/messages"
 
-            client_exists(client_id) do |exists|
-              @redis.del(queue) unless exists
-            end
+          @server.debug 'Queueing for client ?: ?', client_id, message
+          @redis.rpush(queue, json_message)
+          @redis.publish(@message_channel, client_id)
+
+          client_exists(client_id) do |exists|
+            @redis.del(queue) unless exists
           end
         end
       end
 
       @server.trigger(:publish, message['clientId'], message['channel'], message['data'])
+    end
+
+    private
+
+    def delay_channels
+      @delay_channels ||= Array(@options[:delay_channels]).flatten
+    end
+
+    def delay_channel?(channel)
+      delay_channels.empty? || delay_channels.any? { |pattern| pattern === channel }
     end
   end
 end
